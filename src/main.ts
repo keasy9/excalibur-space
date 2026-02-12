@@ -1,6 +1,5 @@
-import { Engine } from "excalibur";
-import {Config} from "@/config";
+import {createApp} from 'vue';
+import Root from '@/vue/Root.vue';
+import {Config} from '@/game/config';
 
-export const game = new Engine(Config);
-
-game.start('main');
+createApp(Root, { config: Config }).mount('#root');

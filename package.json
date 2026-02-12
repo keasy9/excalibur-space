@@ -16,7 +16,10 @@
     "bugs": {},
     "homepage": "",
     "dependencies": {
-        "excalibur": "0.32.0"
+        "@vitejs/plugin-vue": "^6.0.4",
+        "excalibur": "0.32.0",
+        "less": "^4.5.1",
+        "vue": "^3.5.28"
     },
     "devDependencies": {
         "@types/node": "^22.10.2",

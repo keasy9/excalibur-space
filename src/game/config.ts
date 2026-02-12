@@ -1,8 +1,6 @@
 import {Color, DisplayMode, ImageFiltering} from 'excalibur';
-import {Main} from "@/scenes/main";
-
-const canvasElem = document.getElementById('canvas');
-if (!canvasElem || !(canvasElem instanceof HTMLCanvasElement)) throw new Error('Canvas не найден!');
+import {Main} from "@/game/scenes/main";
+import {isProd} from '@/game/utils/env';
 
 export const Config = {
     width: 512,
@@ -13,7 +11,7 @@ export const Config = {
     filtering: ImageFiltering.Pixel,
     pixelRatio: window.devicePixelRatio,
     backgroundColor: Color.Black,
-    canvasElement: canvasElem,
     fixedUpdateFps: 60,
     scenes: {main: Main},
+    suppressConsoleBootMessage: isProd(),
 } as const;

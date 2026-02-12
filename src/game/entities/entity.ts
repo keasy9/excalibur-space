@@ -1,5 +1,5 @@
 import {ActionsComponent, BodyComponent, ColliderComponent, type Component, Entity as ExcaliburEntity, Graphic, GraphicsComponent, type MaybeKnownComponent, MotionComponent, PointerComponent, TransformComponent, type Vector} from 'excalibur';
-import {toVector, VectorLike} from '@/utils/convert.ts';
+import {toVector, VectorLike} from '@/game/utils/convert';
 
 type MaybeKnownComponentProp<Component, TKnownComponents, ComponentProp, Fallback = undefined> = Component extends TKnownComponents ? ComponentProp : ComponentProp | Fallback;
 

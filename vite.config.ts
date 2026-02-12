@@ -1,11 +1,12 @@
-import {defineConfig} from "vite";
-import path from "path";
+import {defineConfig} from 'vite';
+import path from 'path';
+import vuePlugin from '@vitejs/plugin-vue';
 
 export default defineConfig({
     base: './',
-    plugins: [],
+    plugins: [vuePlugin()],
     optimizeDeps: {
-        exclude: ["excalibur"],
+        exclude: ['excalibur'],
     },
     build: {
         assetsInlineLimit: 0,
