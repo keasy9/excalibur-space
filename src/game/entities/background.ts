@@ -17,10 +17,12 @@ export class Background extends Entity<TransformComponent | GraphicsComponent> {
     public onInitialize(engine: Engine) {
         this.setPos(0, 0);
 
-        this.graphics.use(new Rectangle({
+        const rect = new Rectangle({
             width: engine.drawWidth,
             height: engine.drawHeight,
-        }));
+        });
+
+        this.graphics.use(rect);
 
         this.graphics.anchor = Vector.Zero;
 
@@ -28,5 +30,16 @@ export class Background extends Entity<TransformComponent | GraphicsComponent> {
             name: 'example',
             fragmentSource: exampleMaterialSource,
         });
+
+        engine.screen.events.on('resize', () => {
+            rect.width = engine.drawWidth;
+            rect.height = engine.drawHeight;
+
+            this.setPos(engine.screenToWorldCoordinates(new Vector(0, 0)));
+        });
+    }
+
+    public onPreUpdate(engine: Engine, _elapsed: number) {
+        this.graphics.material?.update(shader => shader.trySetUniformFloat('u_time', engine.clock.now()));
     }
 }

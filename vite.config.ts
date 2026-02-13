@@ -1,5 +1,6 @@
 import {defineConfig} from 'vite';
 import path from 'path';
+// @ts-ignore что-то странное
 import vuePlugin from '@vitejs/plugin-vue';
 
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
     build: {
         assetsInlineLimit: 0,
         sourcemap: true,
-        rollupOptions: {
+        rolldownOptions: {
             output: {
                 format: 'umd'
             }
