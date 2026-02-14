@@ -1,7 +1,7 @@
 import {Entity} from "@/game/entities/entity";
 import {Engine, EntityOptions, GraphicsComponent, Rectangle, TransformComponent, Vector} from 'excalibur';
 import {Material} from "@/game/materials/material";
-import exampleMaterialSource from '@/game/materials/sources/example.glsl?raw';
+import backgroundMaterialSource from '@/game/materials/sources/background.glsl?raw';
 
 export class Background extends Entity<TransformComponent | GraphicsComponent> {
     constructor(options: Omit<EntityOptions<never>, 'components'> = {}) {
@@ -28,7 +28,7 @@ export class Background extends Entity<TransformComponent | GraphicsComponent> {
 
         this.graphics.material = new Material({
             name: 'example',
-            fragmentSource: exampleMaterialSource,
+            fragmentSource: backgroundMaterialSource,
         });
 
         engine.screen.events.on('resize', () => {
