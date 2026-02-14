@@ -15,7 +15,7 @@
                 />
 
             </div>
-            <Ui class="root__ui" v-model="state"/>
+            <Ui class="root__ui" v-model="State"/>
         </div>
         <canvas ref="canvas"></canvas>
     </div>
@@ -23,20 +23,16 @@
 
 <script setup lang="ts">
     import {Engine, EngineOptions} from 'excalibur';
-    import {reactive, ref, toRaw, useTemplateRef, watch} from 'vue';
+    import {ref, toRaw, useTemplateRef, watch} from 'vue';
     import {Loader} from '@/resources';
     import Ui from '@/vue/Ui.vue';
     import arrowSvg from '/assets/icons/arrow.svg?raw';
+    import {State} from '@/game/utils/state';
 
     const props = defineProps<{ config: EngineOptions }>();
     const canvas = useTemplateRef('canvas');
 
     const uiVisible = ref<boolean>(true);
-
-    const state = reactive({
-        blinkStars: true,
-        starsCount: 1.0,
-    });
 
     let game: Engine|undefined;
 
@@ -48,6 +44,7 @@
             game.start('main', { loader: Loader });
         }
     });
+
 </script>
 
 <style lang="less">
