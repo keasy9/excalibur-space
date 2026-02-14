@@ -15,7 +15,7 @@ export class Background extends Entity<TransformComponent | GraphicsComponent> {
     }
 
     public onInitialize(engine: Engine) {
-        this.setPos(0, 0);
+        this.setPos(engine.getWorldBounds().left, engine.getWorldBounds().top);
 
         const rect = new Rectangle({
             width: engine.drawWidth,
@@ -35,7 +35,7 @@ export class Background extends Entity<TransformComponent | GraphicsComponent> {
             rect.width = engine.drawWidth;
             rect.height = engine.drawHeight;
 
-            this.setPos(engine.screenToWorldCoordinates(new Vector(0, 0)));
+            this.setPos(engine.getWorldBounds().left, engine.getWorldBounds().top)
         });
     }
 
