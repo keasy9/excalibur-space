@@ -1,6 +1,6 @@
 import {Vector} from 'excalibur';
 
-export type VectorLike = Vector | [number, number];
+export type VectorLike = Vector | [number, number] | { x: number, y: number };
 
 /**
  * ```ts
@@ -17,5 +17,6 @@ export type VectorLike = Vector | [number, number];
 export function toVector<T extends VectorLike | undefined | number>(vectorOrX: T, y?: number): T extends undefined ? undefined : Vector {
     if (typeof vectorOrX === 'number') return new Vector(vectorOrX, y ?? vectorOrX) as any;
     if (!vectorOrX || (vectorOrX instanceof Vector)) return vectorOrX as any;
-    return new Vector(...(vectorOrX as [number, number])) as any;
+    if (Array.isArray(vectorOrX)) return new Vector(...(vectorOrX as [number, number])) as any;
+    return new Vector(vectorOrX.x, vectorOrX.y) as any;
 }

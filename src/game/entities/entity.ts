@@ -87,7 +87,8 @@ export class Entity<TKnownComponents extends Component = any> extends ExcaliburE
     /**
      * Вернёт текущую графику, если у сущности есть GraphicsComponent.
      */
-    public getGraphic<TCurrentGraphic extends Graphic = Graphic>(): MaybeKnownComponentProp<TransformComponent, TKnownComponents, TCurrentGraphic> {
+    public getGraphic<TCurrentGraphic extends Graphic | undefined = Graphic | undefined>(
+    ): MaybeKnownComponentProp<TransformComponent, TKnownComponents, TCurrentGraphic> {
         return this.get(GraphicsComponent)?.current as any;
     }
 
