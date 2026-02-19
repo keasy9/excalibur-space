@@ -5,7 +5,7 @@ import {watch} from 'vue';
 import {State} from '@/game/utils/state';
 import fragment from '@/game/materials/sources/background.frag?raw';
 
-export class StarFieldBackground extends Entity<TransformComponent | GraphicsComponent> {
+export class StarField extends Entity<TransformComponent | GraphicsComponent> {
     constructor(options: Omit<EntityOptions<never>, 'components'> = {}) {
         super({
             ...options,
