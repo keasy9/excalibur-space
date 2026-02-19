@@ -9,6 +9,8 @@ uniform vec2 u_resolution;
 uniform float u_stars_factor;
 uniform float u_time;
 uniform bool u_blinking_enabled;
+uniform vec4 u_star_from_color;
+uniform vec4 u_star_to_color;
 
 out vec4 out_color;
 
@@ -39,7 +41,7 @@ void main() {
         float starSize       = random(tile + vec2(1.0)) * 2.0 + 1.0;
         float baseBrightness = random(tile + vec2(2.0)) * 0.7 + 0.3;
         float hueShift       = random(tile + vec2(3.0));
-        vec3 starColor       = mix(vec3(1.0, 0.9, 0.7), vec3(0.7, 0.8, 1.0), hueShift);
+        vec3 starColor       = mix(vec3(u_star_from_color), vec3(u_star_to_color), hueShift);
 
         float finalBrightness = baseBrightness;
 

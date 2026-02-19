@@ -24,7 +24,7 @@
 <script setup lang="ts">
     import {Engine, EngineOptions} from 'excalibur';
     import {ref, toRaw, useTemplateRef, watch} from 'vue';
-    import {Loader} from '@/resources';
+    import {Loader} from '@/game/resources';
     import Ui from '@/vue/Ui.vue';
     import arrowSvg from '/assets/icons/arrow.svg?raw';
     import {State} from '@/game/utils/state';

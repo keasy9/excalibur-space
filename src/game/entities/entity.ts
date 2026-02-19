@@ -78,6 +78,21 @@ export class Entity<TKnownComponents extends Component = any> extends ExcaliburE
     }
 
     /**
+     * Вернёт поворот сущности, если у неё есть TransformComponent.
+     */
+    public getRotation(): MaybeKnownComponentProp<TransformComponent, TKnownComponents, number> {
+        return this.get(TransformComponent)?.rotation as any;
+    }
+
+    /**
+     * Установит поворот сущности, если у неё есть TransformComponent.
+     */
+    public setRotation(newRotation: number): this {
+        if (this.has(TransformComponent)) this.get(TransformComponent)!.rotation = newRotation;
+        return this;
+    }
+
+    /**
      * Вернёт GraphicsComponent, если он есть у сущности.
      */
     public get graphics(): MaybeKnownComponent<GraphicsComponent, TKnownComponents> {
@@ -98,6 +113,22 @@ export class Entity<TKnownComponents extends Component = any> extends ExcaliburE
      */
     public setGraphic(newGraphic: Graphic): this {
         this.get(GraphicsComponent)?.use(newGraphic);
+        return this;
+    }
+
+    /**
+     * Вернёт непрозрачность текущей графики сущности, если у неё есть GraphicsComponent.
+     */
+    public getOpacity(): MaybeKnownComponentProp<GraphicsComponent, TKnownComponents, number> {
+        return this.get(GraphicsComponent)?.current?.opacity as any;
+    }
+
+    /**
+     * Установит непрозрачность текущей графики сущности, если у неё есть GraphicsComponent.
+     */
+    public setOpacity(newOpacity: number): this {
+        const graphic = this.get(GraphicsComponent)?.current;
+        if (graphic) graphic.opacity = newOpacity;
         return this;
     }
 

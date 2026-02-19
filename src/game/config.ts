@@ -1,6 +1,6 @@
 import {Color, DisplayMode} from 'excalibur';
-import {Main} from "@/game/scenes/main";
-import {isProd} from '@/game/utils/env';
+//@ts-ignore что-то странное
+import {Main} from '@/game/scenes/main';
 
 export const Config = {
     width: 512,
@@ -12,6 +12,6 @@ export const Config = {
     backgroundColor: Color.Black,
     fixedUpdateFps: 60,
     scenes: {main: Main},
-    suppressConsoleBootMessage: isProd(),
+    suppressConsoleBootMessage: false, // демонстрационный проект, поэтому намеренно всегда показываем
     suppressPlayButton: true,
 } as const;

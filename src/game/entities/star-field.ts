@@ -4,6 +4,8 @@ import {Material} from "@/game/materials/material";
 import {watch} from 'vue';
 import {State} from '@/game/utils/state';
 import fragment from '@/game/materials/sources/background.frag?raw';
+//@ts-ignore что-то странное
+import {Colors} from '@/game/colors';
 
 export class StarField extends Entity<TransformComponent | GraphicsComponent> {
     constructor(options: Omit<EntityOptions<never>, 'components'> = {}) {
@@ -37,6 +39,11 @@ export class StarField extends Entity<TransformComponent | GraphicsComponent> {
             },
         });
 
+        this.graphics.material?.update(shader => {
+            shader.trySetUniform('uniform4fv', 'u_star_from_color', Colors.starYellow.toFloat());
+            shader.trySetUniform('uniform4fv', 'u_star_to_color', Colors.starBlue.toFloat());
+        });
+
         engine.screen.events.on('resize', () => {
             rect.width = engine.drawWidth;
             rect.height = engine.drawHeight;
@@ -44,14 +51,14 @@ export class StarField extends Entity<TransformComponent | GraphicsComponent> {
             this.setPos(engine.getWorldBounds().left, engine.getWorldBounds().top);
         });
 
-        watch(() => [State.blinkStars, State.starsCount], this.updateState.bind(this));
+        watch(() => [State.blinkStars, State.starsCount], this.onUpdateState.bind(this));
     }
 
     public onPreUpdate(engine: Engine, _elapsed: number) {
         this.graphics.material?.update(shader => shader.trySetUniformFloat('u_time', engine.clock.now()));
     }
 
-    protected updateState(): void {
+    protected onUpdateState(): void {
         this.graphics.material?.update(shader => {
             shader.trySetUniformFloat('u_stars_factor', State.starsCount);
             shader.trySetUniformBoolean('u_blinking_enabled', State.blinkStars);
