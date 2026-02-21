@@ -1,19 +1,19 @@
-import {Entity} from "@/game/entities/entity";
-import {Engine, EntityOptions, GraphicsComponent, Rectangle, TransformComponent, Vector} from 'excalibur';
+import {ColliderComponent, Engine, EntityOptions, GraphicsComponent, Rectangle, TransformComponent, Vector} from 'excalibur';
 import {Material} from "@/game/materials/material";
 import {watch} from 'vue';
 import {State} from '@/game/utils/state';
 import fragment from '@/game/materials/sources/background.frag?raw';
 //@ts-ignore что-то странное
 import {Colors} from '@/game/colors';
+import {Entity} from '@/game/entities/entity';
 
-export class StarField extends Entity<TransformComponent | GraphicsComponent> {
+export class StarField extends Entity<TransformComponent | GraphicsComponent | ColliderComponent> {
     constructor(options: Omit<EntityOptions<never>, 'components'> = {}) {
         super({
             ...options,
             components: [
                 new TransformComponent(),
-                new GraphicsComponent(),
+                new GraphicsComponent({ anchor: Vector.Zero }),
             ],
         });
     }
@@ -27,8 +27,6 @@ export class StarField extends Entity<TransformComponent | GraphicsComponent> {
         });
 
         this.graphics.use(rect);
-
-        this.graphics.anchor = Vector.Zero;
 
         this.graphics.material = new Material({
             name: 'example',

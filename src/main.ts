@@ -6,4 +6,9 @@ import {Loader} from '@/game/resources';
 
 createApp(Root).mount('#root');
 
-new Engine({ ...Config, canvasElementId: 'canvas'}).start('main', { loader: Loader })
+
+const game = new Engine({ ...Config, canvasElementId: 'canvas'});
+
+game.start(Loader).then(() => game.goToScene('main'));
+
+

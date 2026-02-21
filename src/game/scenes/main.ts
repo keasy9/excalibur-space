@@ -26,12 +26,12 @@ export class Main extends Scene {
     }
 
     protected makeStars() {
-        this.add(new StarField().setZ(0));
+        this.add(new StarField());
     }
 
     protected makeBigStars() {
         this.bigStars.forEach(star => this.bigStarsPool?.return(star));
-        this.bigStars = [];
+        this.bigStars =  [];
 
         this.bigStarsPool ??= new RentalPool(
             () => new BigStar().setZ(1),

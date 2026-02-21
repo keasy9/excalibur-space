@@ -1,16 +1,24 @@
-import {ActionsComponent, Circle, EmitterType, Engine, GraphicsComponent, GraphicsGroup, GraphicsGrouping, ParticleEmitter, randomInRange, randomIntInRange, TransformComponent, Vector} from 'excalibur';
+import {ActionsComponent, Circle, EmitterType, Engine, EntityOptions, GraphicsComponent, GraphicsGroup, GraphicsGrouping, randomInRange, randomIntInRange, TransformComponent, Vector} from 'excalibur';
 import {toVector, VectorLike} from '@/game/utils/convert';
 import {Color} from '@/game/utils/color';
 import {Entity} from '@/game/entities/entity';
 import {Colors} from '@/game/colors';
+import {ParticleEmitter} from '@/game/extend/particle/particle-emitter';
 
 // todo отрефакторить инициализацию, здесь и в отальных сущностях
 export class Comet extends Entity<GraphicsComponent | TransformComponent | ActionsComponent> {
     protected circle: Circle|undefined;
     protected trailEmitter: ParticleEmitter|undefined;
 
-    public constructor() {
-        super([new GraphicsComponent(), new TransformComponent(), new ActionsComponent()]);
+    public constructor(options: Omit<EntityOptions<never>, 'components'> = {}) {
+        super({
+            ...options,
+            components: [
+                new TransformComponent(),
+                new GraphicsComponent(),
+                new ActionsComponent(),
+            ],
+        });
     }
 
     public onInitialize(_engine: Engine): void {

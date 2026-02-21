@@ -1,9 +1,19 @@
-import {ActionsComponent, BodyComponent, ColliderComponent, type Component, Entity as ExcaliburEntity, Graphic, GraphicsComponent, type MaybeKnownComponent, MotionComponent, PointerComponent, TransformComponent, type Vector} from 'excalibur';
+import {ActionsComponent, BodyComponent, ColliderComponent, type Component, Entity as ExcaliburEntity, EntityOptions, Graphic, GraphicsComponent, type MaybeKnownComponent, MotionComponent, PointerComponent, TransformComponent, type Vector} from 'excalibur';
 import {toVector, VectorLike} from '@/game/utils/convert';
 
 type MaybeKnownComponentProp<Component, TKnownComponents, ComponentProp, Fallback = undefined> = Component extends TKnownComponents ? ComponentProp : ComponentProp | Fallback;
 
 export class Entity<TKnownComponents extends Component = any> extends ExcaliburEntity<TKnownComponents> {
+    public constructor(options: EntityOptions<TKnownComponents>) {
+        options.components ??= [];
+        if (!options.components?.find(c => c instanceof ColliderComponent)) {
+            // @ts-ignore без ColliderComponent на github pages сущности не отображаются почему-то...
+            options.components.push(new ColliderComponent());
+        }
+
+        super(options);
+    }
+
     /**
      * Вернёт TransformComponent, если он есть у сущности.
      */
