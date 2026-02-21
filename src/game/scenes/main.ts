@@ -105,7 +105,7 @@ export class Main extends Scene {
 
         let distance = from.distance(to);
 
-        while (distance < 50 && distance > 200) {
+        while (distance < 50 || distance > 200) {
             to.x = randomIntInRange(-10, this.engine.drawWidth + 10);
             to.y = randomIntInRange(-10, this.engine.drawHeight + 10);
 

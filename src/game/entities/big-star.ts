@@ -1,5 +1,5 @@
 import {Entity} from '@/game/entities/entity';
-import {clamp, Engine, GraphicsComponent, randomInRange, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
+import {clamp, Engine, GraphicsComponent, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
 import {Resources} from '@/game/resources';
 import {Color} from '@/game/utils/color';
 import {Colors} from '@/game/colors';
@@ -78,7 +78,7 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
 
     public randomize(): this {
         this.setGraphic(BigStar.loadTexture().sprites[randomIntInRange(0, 5)]);
-        this.getGraphic<Sprite>().tint = Color.lerp(Colors.starYellow, Colors.starBlue, randomInRange(0, 1));
+        this.getGraphic<Sprite>().tint = Color.lerp(Colors.starYellow, Colors.starBlue, Math.random());
         this.setRotation(Math.random() * Math.PI * 2);
 
         return this;
