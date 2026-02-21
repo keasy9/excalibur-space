@@ -120,15 +120,15 @@ export class Entity<TKnownComponents extends Component = any> extends ExcaliburE
      * Вернёт непрозрачность текущей графики сущности, если у неё есть GraphicsComponent.
      */
     public getOpacity(): MaybeKnownComponentProp<GraphicsComponent, TKnownComponents, number> {
-        return this.get(GraphicsComponent)?.current?.opacity as any;
+        return this.get(GraphicsComponent)?.opacity as any;
     }
 
     /**
      * Установит непрозрачность текущей графики сущности, если у неё есть GraphicsComponent.
      */
     public setOpacity(newOpacity: number): this {
-        const graphic = this.get(GraphicsComponent)?.current;
-        if (graphic) graphic.opacity = newOpacity;
+        const graphics = this.get(GraphicsComponent);
+        if (graphics) graphics.opacity = newOpacity;
         return this;
     }
 

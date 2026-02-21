@@ -1,16 +1,24 @@
-import {Engine, RentalPool, Scene} from 'excalibur';
+import {Engine, randomIntInRange, RentalPool, Scene, Timer, Vector} from 'excalibur';
 import {StarField} from "@/game/entities/star-field";
 import {BigStar} from '@/game/entities/big-star';
 import {watch} from 'vue';
 import {State} from '@/game/utils/state';
+import {Comet} from '@/game/entities/comet';
 
+// todo вытащить генерацию случайной точки, случайных точек с интервалом, генерацию с ограничением попыток и генерацию точек с дистанцией
 export class Main extends Scene {
+    protected static COMETS_INTERVAL: number = 2000;
+
     protected bigStars: BigStar[] = [];
     protected bigStarsPool: RentalPool<BigStar>|undefined;
+
+    protected cometsTimer: Timer|undefined;
+    protected cometsPool: RentalPool<Comet>|undefined;
 
     public onInitialize(engine: Engine) {
         this.makeStars();
         this.makeBigStars();
+        this.updateCometsTimer();
 
         engine.screen.events.on('resize', () => this.onResize());
 
@@ -26,7 +34,7 @@ export class Main extends Scene {
         this.bigStars = [];
 
         this.bigStarsPool ??= new RentalPool(
-            () => new BigStar(),
+            () => new BigStar().setZ(1),
             used => used.randomize(),
         );
 
@@ -44,7 +52,7 @@ export class Main extends Scene {
             const key = randomX + ',' + randomY;
             if (!uniqueCoordinates.has(key)) {
                 attempts = 0;
-                this.bigStars.push(this.bigStarsPool.rent(true).setPos(randomX, randomY).setZ(1));
+                this.bigStars.push(this.bigStarsPool.rent(true).setPos(randomX, randomY));
                 uniqueCoordinates.add(key);
             }
         }
@@ -58,9 +66,60 @@ export class Main extends Scene {
             if (index + 1 < visibleCount) this.add(star);
             else this.remove(star);
         })
+
+        this.updateCometsTimer();
     }
 
     protected onResize(): void {
         this.makeBigStars();
+    }
+
+    protected updateCometsTimer(): void {
+        if (!this.cometsTimer) {
+            this.cometsTimer = new Timer({
+                interval: Main.COMETS_INTERVAL,
+                action: this.makeComet.bind(this),
+                repeats: true,
+            });
+            this.add(this.cometsTimer);
+        }
+
+        if (State.cometsInterval < 0.1) {
+            this.cometsTimer.stop();
+        } else {
+            this.cometsTimer.interval = Math.round(Main.COMETS_INTERVAL / State.cometsInterval);
+            this.cometsTimer.start();
+        }
+    }
+
+    protected makeComet(): void {
+        const from = new Vector(
+            randomIntInRange(-10, this.engine.drawWidth + 10),
+            randomIntInRange(-10, this.engine.drawHeight + 10),
+        );
+
+        const to = new Vector(
+            randomIntInRange(-10, this.engine.drawWidth + 10),
+            randomIntInRange(-10, this.engine.drawHeight + 10),
+        );
+
+        let distance = from.distance(to);
+
+        while (distance < 50 && distance > 200) {
+            to.x = randomIntInRange(-10, this.engine.drawWidth + 10);
+            to.y = randomIntInRange(-10, this.engine.drawHeight + 10);
+
+            distance = from.distance(to);
+        }
+
+        this.cometsPool ??= new RentalPool(
+            () => new Comet().setZ(2),
+            used => used.randomize(),
+        )
+
+        const comet = this.cometsPool.rent();
+        this.add(comet);
+
+        comet.fly(from, to).then(() => this.cometsPool!.return(comet));
     }
 }

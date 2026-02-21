@@ -77,7 +77,7 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
     }
 
     public randomize(): this {
-        this.graphics.use(BigStar.loadTexture().sprites[randomIntInRange(0, 5)]);
+        this.setGraphic(BigStar.loadTexture().sprites[randomIntInRange(0, 5)]);
         this.getGraphic<Sprite>().tint = Color.lerp(Colors.starYellow, Colors.starBlue, randomInRange(0, 1));
         this.setRotation(Math.random() * Math.PI * 2);
 
