@@ -13,7 +13,7 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
         super([new GraphicsComponent(), new TransformComponent()]);
     }
 
-    public onInitialize(_engine: Engine) {
+    protected static loadTexture(): SpriteSheet {
         BigStar.texture ??= SpriteSheet.fromImageSource({
             image: Resources.SpriteStars,
             grid: {
@@ -24,9 +24,11 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
             },
         });
 
-        this.graphics.use(BigStar.texture.sprites[randomIntInRange(0, 5)]);
-        this.getGraphic<Sprite>().tint = Color.lerp(Colors.starYellow, Colors.starBlue, randomInRange(0, 1));
-        this.setRotation(Math.random() * Math.PI * 2);
+        return BigStar.texture;
+    }
+
+    public onInitialize(_engine: Engine) {
+        this.randomize();
     }
 
     public onPreUpdate(engine: Engine, _elapsed: number) {
@@ -87,5 +89,13 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
         finalBrightness = Math.max(0.1, Math.min(1.0, finalBrightness)); // clamp [0.1, 1.0]
 
         this.setOpacity(finalBrightness);
+    }
+
+    public randomize(): this {
+        this.graphics.use(BigStar.loadTexture().sprites[randomIntInRange(0, 5)]);
+        this.getGraphic<Sprite>().tint = Color.lerp(Colors.starYellow, Colors.starBlue, randomInRange(0, 1));
+        this.setRotation(Math.random() * Math.PI * 2);
+
+        return this;
     }
 }

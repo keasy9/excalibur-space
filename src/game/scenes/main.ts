@@ -1,4 +1,4 @@
-import {Engine, Scene} from 'excalibur';
+import {Engine, RentalPool, Scene} from 'excalibur';
 import {StarField} from "@/game/entities/star-field";
 import {BigStar} from '@/game/entities/big-star';
 import {watch} from 'vue';
@@ -6,6 +6,7 @@ import {State} from '@/game/utils/state';
 
 export class Main extends Scene {
     protected bigStars: BigStar[] = [];
+    protected bigStarsPool: RentalPool<BigStar>|undefined;
 
     public onInitialize(engine: Engine) {
         this.makeStars();
@@ -21,10 +22,13 @@ export class Main extends Scene {
     }
 
     protected makeBigStars() {
-        this.bigStars.forEach(star => {
-            star.kill();
-            this.remove(star);
-        });
+        this.bigStars.forEach(star => this.bigStarsPool?.return(star));
+        this.bigStars = [];
+
+        this.bigStarsPool ??= new RentalPool(
+            () => new BigStar(),
+            used => used.randomize(),
+        );
 
         const bigStarsCount = (this.engine.drawWidth * this.engine.drawHeight) / 60000;
         const uniqueCoordinates = new Set();
@@ -40,7 +44,7 @@ export class Main extends Scene {
             const key = randomX + ',' + randomY;
             if (!uniqueCoordinates.has(key)) {
                 attempts = 0;
-                this.bigStars.push(new BigStar().setPos(randomX, randomY).setZ(1));
+                this.bigStars.push(this.bigStarsPool.rent(true).setPos(randomX, randomY).setZ(1));
                 uniqueCoordinates.add(key);
             }
         }
