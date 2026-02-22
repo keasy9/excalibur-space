@@ -15,7 +15,7 @@
             />
             <Range
                 v-model="modelValue.dustAmount"
-                label="Кол-во туманностей"
+                label="Кол-во пыли"
             />
             <ResetButton
                 @click="resetState"

@@ -40,6 +40,8 @@
         padding: 8px;
         background: fade(black, 20);
         color: lightpink;
+        max-width: calc(100vw - (32px + 8px));
+        box-sizing: border-box;
 
         &--hidden {
             transform: translateX(-100%);
