@@ -17,10 +17,9 @@
                 v-model="modelValue.dustAmount"
                 label="Кол-во туманностей"
             />
-            <Button
+            <ResetButton
                 @click="resetState"
                 label="Сбросить"
-                :icon="resetSvg"
             />
         </div>
     </div>
@@ -30,8 +29,7 @@
     import Toggle from '@/vue/elements/Toggle.vue';
     import Range from '@/vue/elements/Range.vue';
     import {State, StateDefaults, StateProps} from '@/state';
-    import Button from '@/vue/elements/Button.vue';
-    import resetSvg from '/assets/icons/reset.svg?raw';
+    import ResetButton from '@/vue/elements/ResetButton.vue';
 
     const modelValue = defineModel<StateProps>({
         default: {
