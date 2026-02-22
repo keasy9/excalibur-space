@@ -1,6 +1,10 @@
 <template>
     <div class="ui">
         <div class="ui__group">
+            <span class="ui__fps">
+                FPS:
+                <span v-html="FPS"/>
+            </span>
             <Toggle
                 v-model="modelValue.blinkStars"
                 label="Мерцание звёзд"
@@ -28,7 +32,7 @@
 <script setup lang="ts">
     import Toggle from '@/vue/elements/Toggle.vue';
     import Range from '@/vue/elements/Range.vue';
-    import {State, StateDefaults, StateProps} from '@/state';
+    import {FPS, State, StateDefaults, StateProps} from '@/state';
     import ResetButton from '@/vue/elements/ResetButton.vue';
 
     const modelValue = defineModel<StateProps>({

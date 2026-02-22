@@ -12,7 +12,6 @@
                 :class="{ 'ui-wrapper__toggle-icon--mirror': uiVisible }"
                 v-html="arrowSvg"
             />
-
         </div>
         <Ui class="ui-wrapper__ui" v-model="State"/>
     </div>
@@ -25,7 +24,6 @@
     import {State} from '@/state';
 
     const uiVisible = ref<boolean>(true);
-
 </script>
 
 <style lang="less">

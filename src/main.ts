@@ -10,5 +10,3 @@ createApp(Root).mount('#root');
 const game = new Engine({ ...Config, canvasElementId: 'canvas'});
 
 game.start(Loader).then(() => game.goToScene('main'));
-
-

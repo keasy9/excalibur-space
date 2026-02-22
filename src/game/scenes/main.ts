@@ -2,7 +2,7 @@ import {Engine, randomIntInRange, RentalPool, Scene, Timer, Vector} from 'excali
 import {Stars} from "@/game/entities/stars";
 import {BigStar} from '@/game/entities/big-star';
 import {watch} from 'vue';
-import {State} from '@/state';
+import {FPS, State} from '@/state';
 import {Comet} from '@/game/entities/comet';
 import {Dust} from '@/game/entities/dust';
 
@@ -26,6 +26,16 @@ export class Main extends Scene {
         engine.screen.events.on('resize', () => this.onResize());
 
         watch(State, this.onUpdateState.bind(this));
+
+        FPS.value = (1000/this.engine.currentFrameElapsedMs).toFixed(0);
+
+        const fpsTimer = new Timer({
+            interval: 500,
+            repeats: true,
+            action: () => FPS.value = (1000/this.engine.currentFrameElapsedMs).toFixed(0),
+        })
+        this.add(fpsTimer);
+        fpsTimer.start();
     }
 
     protected makeStars() {

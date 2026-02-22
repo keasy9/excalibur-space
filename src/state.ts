@@ -1,4 +1,4 @@
-import {reactive, watch} from 'vue';
+import {reactive, ref, watch} from 'vue';
 
 export type StateProps = {
     blinkStars: boolean,
@@ -22,6 +22,8 @@ export const State = reactive<StateProps>({
     cometsInterval: storageValues.cometsInterval ?? StateDefaults.cometsInterval,
     dustAmount: storageValues.dustAmount ?? StateDefaults.dustAmount,
 });
+
+export const FPS = ref<string|number>(0);
 
 watch(State, () => {
     localStorage.setItem('state', JSON.stringify(State));
