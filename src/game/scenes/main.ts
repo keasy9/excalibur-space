@@ -8,7 +8,7 @@ import {Dust} from '@/game/entities/dust';
 
 // todo вытащить генерацию случайной точки, случайных точек с интервалом, генерацию с ограничением попыток и генерацию точек с дистанцией
 export class Main extends Scene {
-    protected static COMETS_INTERVAL: number = 2000;
+    protected static COMETS_INTERVAL: number = 1000;
 
     protected bigStars: BigStar[] = [];
     protected bigStarsPool: RentalPool<BigStar>|undefined;
@@ -108,7 +108,13 @@ export class Main extends Scene {
 
         let distance = from.distance(to);
 
-        while (distance < 50 || distance > 200) {
+        while (
+            distance < 50 || distance > 200
+            || to.x < 0 && from.x < 0
+            || to.y < 0 && from.y < 0
+            || to.x > this.engine.drawWidth && from.x < this.engine.drawWidth
+            || to.y > this.engine.drawHeight && from.y < this.engine.drawHeight
+        ) {
             to.x = randomIntInRange(-10, this.engine.drawWidth + 10);
             to.y = randomIntInRange(-10, this.engine.drawHeight + 10);
 
@@ -124,5 +130,10 @@ export class Main extends Scene {
         this.add(comet);
 
         comet.fly(from, to).then(() => this.cometsPool!.return(comet));
+
+        if (this.cometsTimer) {
+            this.cometsTimer.reset(Math.round((Main.COMETS_INTERVAL / State.cometsInterval + 500 * Math.random())));
+            this.cometsTimer.start();
+        }
     }
 }
