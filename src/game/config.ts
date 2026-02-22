@@ -1,5 +1,4 @@
 import {Color, DisplayMode} from 'excalibur';
-//@ts-ignore что-то странное
 import {Main} from '@/game/scenes/main';
 
 export const Config = {

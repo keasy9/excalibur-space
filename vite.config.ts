@@ -1,6 +1,5 @@
 import {defineConfig} from 'vite';
 import path from 'path';
-// @ts-ignore что-то странное
 import vuePlugin from '@vitejs/plugin-vue';
 
 export default defineConfig({

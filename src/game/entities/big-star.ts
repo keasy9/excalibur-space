@@ -3,7 +3,7 @@ import {clamp, ColliderComponent, Engine, EntityOptions, GraphicsComponent, rand
 import {Resources} from '@/game/resources';
 import {Color} from '@/game/utils/color';
 import {Colors} from '@/game/colors';
-import {State} from '@/game/utils/state';
+import {State} from '@/state';
 import {randomByVec} from '@/game/utils/math';
 
 export class BigStar extends Entity<GraphicsComponent | TransformComponent | ColliderComponent> {

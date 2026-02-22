@@ -13,6 +13,10 @@
                 v-model="modelValue.cometsInterval"
                 label="Частота комет"
             />
+            <Range
+                v-model="modelValue.dustAmount"
+                label="Кол-во туманностей"
+            />
         </div>
     </div>
 </template>
@@ -20,13 +24,14 @@
 <script setup lang="ts">
     import Toggle from '@/vue/inputs/Toggle.vue';
     import Range from '@/vue/inputs/Range.vue';
-    import {StateProps} from '@/game/utils/state';
+    import {StateProps} from '@/state';
 
     const modelValue = defineModel<StateProps>({
         default: {
             blinkStars: true,
             starsCount: 1,
             cometsInterval: 1.0,
+            dustAmount: 1.0,
         },
     });
 </script>

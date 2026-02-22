@@ -22,7 +22,7 @@
     import {ref} from 'vue';
     import Ui from '@/vue/Ui.vue';
     import arrowSvg from '/assets/icons/arrow.svg?raw';
-    import {State} from '@/game/utils/state';
+    import {State} from '@/state';
 
     const uiVisible = ref<boolean>(true);
 

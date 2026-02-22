@@ -1,9 +1,10 @@
 import {Engine, randomIntInRange, RentalPool, Scene, Timer, Vector} from 'excalibur';
-import {StarField} from "@/game/entities/star-field";
+import {Stars} from "@/game/entities/stars";
 import {BigStar} from '@/game/entities/big-star';
 import {watch} from 'vue';
-import {State} from '@/game/utils/state';
+import {State} from '@/state';
 import {Comet} from '@/game/entities/comet';
+import {Dust} from '@/game/entities/dust';
 
 // todo вытащить генерацию случайной точки, случайных точек с интервалом, генерацию с ограничением попыток и генерацию точек с дистанцией
 export class Main extends Scene {
@@ -20,13 +21,15 @@ export class Main extends Scene {
         this.makeBigStars();
         this.updateCometsTimer();
 
+        this.add(new Dust().setZ(3));
+
         engine.screen.events.on('resize', () => this.onResize());
 
         watch(State, this.onUpdateState.bind(this));
     }
 
     protected makeStars() {
-        this.add(new StarField());
+        this.add(new Stars());
     }
 
     protected makeBigStars() {
