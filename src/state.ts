@@ -9,11 +9,18 @@ export type StateProps = {
 
 const storageValues = JSON.parse(localStorage.getItem('state') ?? '{}');
 
+export const StateDefaults: StateProps = {
+    blinkStars: true,
+    starsCount: .8,
+    cometsInterval: .5,
+    dustAmount: .5,
+};
+
 export const State = reactive<StateProps>({
-    blinkStars: storageValues.blinkStars ?? true,
-    starsCount: storageValues.starsCount ?? .8,
-    cometsInterval: storageValues.cometsInterval ?? .5,
-    dustAmount: storageValues.dustAmount ?? .5,
+    blinkStars: storageValues.blinkStars ?? StateDefaults.blinkStars,
+    starsCount: storageValues.starsCount ?? StateDefaults.starsCount,
+    cometsInterval: storageValues.cometsInterval ?? StateDefaults.cometsInterval,
+    dustAmount: storageValues.dustAmount ?? StateDefaults.dustAmount,
 });
 
 watch(State, () => {

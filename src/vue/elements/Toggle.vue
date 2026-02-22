@@ -14,7 +14,6 @@
 <style lang="less">
     .toggle {
         display: flex;
-        flex-direction: reverse;
         align-items: baseline;
         justify-content: space-between;
         gap: 16px;

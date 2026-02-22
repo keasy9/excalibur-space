@@ -49,17 +49,16 @@
             pointer-events: auto;
             position: absolute;
             top: 0;
-            right: -40px;
-            width: 24px;
-            height: 24px;
+            right: 0;
+            transform: translateX(100%);
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 4px;
             background: fade(black, 20);
         }
 
         &__toggle-icon {
-            width: 100%;
-            height: 100%;
+            width: 32px;
+            height: 32px;
             display: block;
             transition: transform var(--transit);
             fill: lightpink;
