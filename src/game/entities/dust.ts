@@ -30,8 +30,7 @@ export class Dust extends Field {
                 shader.trySetUniformFloat('u_size', 20.0);
                 shader.trySetUniformFloat('u_cloud_size', 10.0);
                 shader.trySetUniformFloat('u_amount', State.dustAmount);
-                shader.trySetUniformFloat('u_sharpness', 0.8);
-                shader.trySetUniformInt('u_octaves', 8);
+                shader.trySetUniformFloat('u_sharpness', 0.5);
 
                 // цвета звёзд
                 shader.trySetUniform('uniform3fv', 'u_color_high',[Colors.starBlue.r / 255, Colors.starBlue.g / 255, Colors.starBlue.b / 255]);

@@ -18,7 +18,7 @@ export const StateDefaults: StateProps = {
 
 export const State = reactive<StateProps>({
     blinkStars: storageValues.blinkStars ?? StateDefaults.blinkStars,
-    starsAmount: storageValues.starsCount ?? StateDefaults.starsAmount,
+    starsAmount: storageValues.starsAmount ?? StateDefaults.starsAmount,
     cometsInterval: storageValues.cometsInterval ?? StateDefaults.cometsInterval,
     dustAmount: storageValues.dustAmount ?? StateDefaults.dustAmount,
 });

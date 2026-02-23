@@ -19,7 +19,7 @@ export class Main extends Scene {
     public onInitialize(engine: Engine) {
         this.makeStars();
         this.makeBigStars();
-        this.updateCometsTimer();
+        this.onUpdateState();
 
         this.add(new Dust().setZ(3));
 
@@ -33,7 +33,7 @@ export class Main extends Scene {
             interval: 500,
             repeats: true,
             action: () => FPS.value = (1000/this.engine.currentFrameElapsedMs).toFixed(0),
-        })
+        });
         this.add(fpsTimer);
         fpsTimer.start();
     }
