@@ -74,7 +74,7 @@ export class Main extends Scene {
     }
 
     protected onUpdateState(): void {
-        const visibleCount = Math.round(this.bigStars.length * State.starsCount);
+        const visibleCount = Math.round(this.bigStars.length * State.starsAmount);
         this.bigStars.forEach((star, index) => {
             if (index + 1 < visibleCount) this.add(star);
             else this.remove(star);

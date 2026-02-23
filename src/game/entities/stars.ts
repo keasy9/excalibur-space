@@ -15,7 +15,7 @@ export class Stars extends Field {
             name: 'stars',
             fragmentSource: fragment,
             uniforms: {
-                u_stars_factor: State.starsCount,
+                u_stars_factor: State.starsAmount,
                 u_blinking_enabled: State.blinkStars,
             },
         });
@@ -25,7 +25,7 @@ export class Stars extends Field {
             shader.trySetUniform('uniform4fv', 'u_star_to_color', Colors.starBlue.toFloat());
         });
 
-        watch(() => [State.blinkStars, State.starsCount], this.onUpdateState.bind(this));
+        watch(() => [State.blinkStars, State.starsAmount], this.onUpdateState.bind(this));
     }
 
     public onPreUpdate(engine: Engine, _elapsed: number) {
@@ -34,8 +34,10 @@ export class Stars extends Field {
 
     protected onUpdateState(): void {
         this.graphics.material?.update(shader => {
-            shader.trySetUniformFloat('u_stars_factor', State.starsCount);
+            shader.trySetUniformFloat('u_stars_factor', State.starsAmount);
             shader.trySetUniformBoolean('u_blinking_enabled', State.blinkStars);
         });
+
+        this.graphics.isVisible = State.starsAmount > 0;
     }
 }

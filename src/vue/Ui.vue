@@ -10,7 +10,7 @@
                 label="Мерцание звёзд"
             />
             <Range
-                v-model="modelValue.starsCount"
+                v-model="modelValue.starsAmount"
                 label="Кол-во звёзд"
             />
             <Range
@@ -38,7 +38,7 @@
     const modelValue = defineModel<StateProps>({
         default: {
             blinkStars: true,
-            starsCount: 1,
+            starsAmount: 1,
             cometsInterval: 1.0,
             dustAmount: 1.0,
         },
