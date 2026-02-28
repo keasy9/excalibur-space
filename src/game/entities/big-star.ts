@@ -1,12 +1,12 @@
 import {Entity} from '@/game/entities/entity';
-import {clamp, ColliderComponent, Engine, EntityOptions, GraphicsComponent, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
+import {clamp, Engine, EntityOptions, GraphicsComponent, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
 import {Resources} from '@/game/resources';
 import {Color} from '@/game/utils/color';
 import {Colors} from '@/game/colors';
 import {State} from '@/state';
 import {randomByVec} from '@/game/utils/math';
 
-export class BigStar extends Entity<GraphicsComponent | TransformComponent | ColliderComponent> {
+export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
 
     protected static texture: SpriteSheet|undefined;
 

@@ -1,9 +1,8 @@
-import {ActionsComponent, Circle, EmitterType, Engine, EntityOptions, GraphicsComponent, GraphicsGroup, GraphicsGrouping, randomInRange, randomIntInRange, TransformComponent, Vector} from 'excalibur';
+import {ActionsComponent, Circle, EmitterType, Engine, EntityOptions, GraphicsComponent, GraphicsGroup, GraphicsGrouping, ParticleEmitter, randomInRange, randomIntInRange, TransformComponent, Vector} from 'excalibur';
 import {toVector, VectorLike} from '@/game/utils/convert';
 import {Color} from '@/game/utils/color';
 import {Entity} from '@/game/entities/entity';
 import {Colors} from '@/game/colors';
-import {ParticleEmitter} from '@/game/extend/particle/particle-emitter';
 
 // todo отрефакторить инициализацию, здесь и в отальных сущностях
 export class Comet extends Entity<GraphicsComponent | TransformComponent | ActionsComponent> {

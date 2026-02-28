@@ -5,12 +5,6 @@ type MaybeKnownComponentProp<Component, TKnownComponents, ComponentProp, Fallbac
 
 export class Entity<TKnownComponents extends Component = any> extends ExcaliburEntity<TKnownComponents> {
     public constructor(options: EntityOptions<TKnownComponents>) {
-        options.components ??= [];
-        if (!options.components?.find(c => c instanceof ColliderComponent)) {
-            // @ts-ignore без ColliderComponent на github pages сущности не отображаются почему-то...
-            options.components.push(new ColliderComponent());
-        }
-
         super(options);
     }
 

@@ -12,6 +12,7 @@ export default defineConfig({
         assetsInlineLimit: 0,
         sourcemap: true,
         rolldownOptions: {
+            keepNames: true,
             output: {
                 format: 'umd'
             }
