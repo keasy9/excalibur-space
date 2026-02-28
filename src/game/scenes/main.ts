@@ -1,4 +1,4 @@
-import {BoundingBox, Engine, RentalPool, Scene, Timer} from 'excalibur';
+import {BoundingBox, Engine, randomIntInRange, RentalPool, Scene, Timer} from 'excalibur';
 import {Stars} from "@/game/entities/stars";
 import {BigStar} from '@/game/entities/big-star';
 import {watch} from 'vue';
@@ -104,7 +104,7 @@ export class Main extends Scene {
         const comet = this.cometsPool.rent();
         this.add(comet);
 
-        comet.fly(from, to).then(() => this.cometsPool!.return(comet));
+        comet.fly(from, to, randomIntInRange(150, 250)).then(() => this.cometsPool!.return(comet));
 
         if (this.cometsTimer) {
             this.cometsTimer.reset(Math.round((Main.COMETS_INTERVAL / State.cometsInterval + 500 * Math.random())));

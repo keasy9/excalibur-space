@@ -1,7 +1,7 @@
 import {Entity} from '@/game/entities/entity';
 import {clamp, Engine, EntityOptions, GraphicsComponent, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
 import {Resources} from '@/game/resources';
-import {Color} from '@/game/utils/color';
+import {Color} from '@/game/extend/color';
 import {Colors} from '@/game/colors';
 import {State} from '@/state';
 import {randomByVec} from '@/game/utils/math';
@@ -39,6 +39,7 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
     }
 
     public onPreUpdate(engine: Engine, _elapsed: number) {
+        // todo переделать на actions
         if (!State.blinkStars) {
             this.setOpacity(1.0);
             return;
@@ -84,7 +85,7 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
 
     public randomize(): this {
         this.setGraphic(BigStar.loadTexture().sprites[randomIntInRange(0, 5)]);
-        this.getGraphic<Sprite>().tint = Color.lerp(Colors.starYellow, Colors.starBlue, Math.random());
+        this.getGraphic<Sprite>().tint = Color.lerpLRGB(Colors.starYellow, Colors.starBlue, Math.random());
         this.setRotation(Math.random() * Math.PI * 2);
 
         return this;

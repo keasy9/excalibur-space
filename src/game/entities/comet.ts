@@ -1,101 +1,91 @@
-import {ActionsComponent, Circle, EmitterType, Engine, EntityOptions, GraphicsComponent, GraphicsGroup, GraphicsGrouping, ParticleEmitter, randomInRange, randomIntInRange, TransformComponent, Vector} from 'excalibur';
-import {toVector, VectorLike} from '@/game/utils/convert';
-import {Color} from '@/game/utils/color';
-import {Entity} from '@/game/entities/entity';
+import {EmitterType, Engine, GpuParticleEmitter, ImageSource, randomIntInRange, Sprite, Vector} from 'excalibur';
 import {Colors} from '@/game/colors';
 
-// todo отрефакторить инициализацию, здесь и в отальных сущностях
-export class Comet extends Entity<GraphicsComponent | TransformComponent | ActionsComponent> {
-    protected circle: Circle|undefined;
-    protected trailEmitter: ParticleEmitter|undefined;
+export class Comet extends GpuParticleEmitter {
+    protected static img: ImageSource|undefined;
 
-    public constructor(options: Omit<EntityOptions<never>, 'components'> = {}) {
+    protected static loadImg(): Promise<void|HTMLImageElement> {
+        if (Comet.img) return new Promise((resolve) => resolve());
+
+        const canvas = document.createElement('canvas');
+        canvas.height = 1;
+        canvas.width = 10;
+
+        const ctx2d = canvas.getContext('2d');
+        if (!ctx2d) throw new Error('Не удалось создать текстуру для комет!');
+
+        const gradient = ctx2d.createLinearGradient(0, 0, 10, 0);
+        gradient.addColorStop(0, Colors.starBlue.toHex());
+        gradient.addColorStop(1, Colors.starYellow.toHex());
+
+        ctx2d.fillStyle = gradient;
+        ctx2d.fillRect(0, 0, 10, 1);
+
+        Comet.img = new ImageSource(canvas.toDataURL('image/png'));
+        return Comet.img.load();
+    }
+
+    constructor() {
         super({
-            ...options,
-            components: [
-                new TransformComponent(),
-                new GraphicsComponent(),
-                new ActionsComponent(),
-            ],
+            emitterType: EmitterType.Circle,
+            radius: .5,
+            isEmitting: false,
+            emitRate: 50,
+            particle: {
+                startSize: .5,
+                endSize: .5,
+                fade: true,
+                life: 500,
+            },
         });
     }
 
     public onInitialize(_engine: Engine): void {
-        this.makeGraphic();
-        this.randomize();
+        Comet.loadImg().then(this.randomize.bind(this));
     }
 
-    public fly(from: VectorLike, to: VectorLike): Promise<void> {
-        this.setOpacity(0).setPos(from);
+    public fly(from: Vector, to: Vector, speed: number): Promise<void> {
+        this.graphics.opacity = 0;
+        this.pos = from;
 
         return this.actions
             .fade(1, 100)
             .callMethod(this.startEmiting.bind(this))
-            .moveTo(toVector(to), randomIntInRange(150, 250))
+            .moveTo(to, speed)
             .callMethod(this.stopEmiting.bind(this))
             .fade(0, 100)
             .toPromise();
     }
 
     public randomize(): this {
-        if (this.circle) {
-            this.circle.radius = randomInRange(2, 2.5);
-            this.circle.color = Color.lerp(Colors.starYellow, Colors.starBlue, Math.random());
+        this.emitRate = randomIntInRange(50, 100);
+        this.particle.life = randomIntInRange(300, 500);
 
-            (this.getGraphic<GraphicsGroup>().members[0] as GraphicsGrouping).offset
-                = new Vector(-this.circle.radius, -this.circle.radius);
+        const color = randomIntInRange(0, 9);
 
-            if (this.trailEmitter) {
-                this.trailEmitter.particle.endColor = this.circle.color;
-                this.trailEmitter.particle.beginColor = Color.lerp(Color.White, this.circle.color, 0.5);
-            }
-        }
+        this.particle.graphic = new Sprite({
+            image: Comet.img!,
+            sourceView: {
+                x: color,
+                y: 0,
+                width: color + 1,
+                height: 1,
+            },
+        });
 
         return this;
     }
 
-    protected makeGraphic(): void {
-        const point = new Circle({radius: 1, color: Color.White});
-        const color = Color.lerp(Colors.starYellow, Colors.starBlue, Math.random());
-
-        this.circle = new Circle({
-            radius: randomInRange(2, 2.5),
-            color: color,
-        });
-
-        this.setGraphic(new GraphicsGroup({
-            useAnchor: false,
-            members: [
-                {offset: new Vector(-this.circle.radius, -this.circle.radius), graphic: this.circle},
-                {offset: Vector.Zero, graphic: point},
-            ],
-        }));
-    }
-
     protected startEmiting(): void {
-        if (!this.trailEmitter) {
-            this.trailEmitter = new ParticleEmitter({
-                pos: new Vector(this.circle?.radius ?? 0, this.circle?.radius ?? 0),
-                emitterType: EmitterType.Circle,
-                isEmitting: false,
-                emitRate: 50,
-                particle: {
-                    startSize: 1.2,
-                    endSize: 1.2,
-                    fade: true,
-                    beginColor: Color.lerp(Color.White, this.circle?.color ?? Color.White, 0.5),
-                    endColor: this.circle?.color,
-                    life: 500,
-                }
-            });
-
-            this.addChild(this.trailEmitter);
-        }
-
-        this.trailEmitter.isEmitting = true;
+        this.isEmitting = true;
     }
 
     protected stopEmiting(): void {
-        if (this.trailEmitter) this.trailEmitter.isEmitting = false;
+        this.isEmitting = false;
+    }
+
+    public setZ(newZ: number): this {
+        this.z = newZ;
+        return this;
     }
 }
