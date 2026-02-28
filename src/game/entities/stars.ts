@@ -29,7 +29,10 @@ export class Stars extends Field {
     }
 
     public onPreUpdate(engine: Engine, _elapsed: number) {
-        this.graphics.material?.update(shader => shader.trySetUniformFloat('u_time', engine.clock.now() / 1000));
+        this.graphics.material?.update(shader => {
+            // делим время на 1000 в js, чтобы не делать это в шейдере для каждого пикселя
+            shader.trySetUniformFloat('u_time', engine.clock.now() / 1000);
+        });
     }
 
     protected onUpdateState(): void {
