@@ -1,10 +1,11 @@
-import {Engine, randomIntInRange, RentalPool, Scene, Timer, Vector} from 'excalibur';
+import {BoundingBox, Engine, RentalPool, Scene, Timer} from 'excalibur';
 import {Stars} from "@/game/entities/stars";
 import {BigStar} from '@/game/entities/big-star';
 import {watch} from 'vue';
 import {FPS, State} from '@/state';
 import {Comet} from '@/game/entities/comet';
 import {Dust} from '@/game/entities/dust';
+import {randomVectors} from '@/game/utils/random';
 
 // todo вытащить генерацию случайной точки, случайных точек с интервалом, генерацию с ограничением попыток и генерацию точек с дистанцией
 export class Main extends Scene {
@@ -52,25 +53,12 @@ export class Main extends Scene {
         );
 
         const bigStarsCount = (this.engine.drawWidth * this.engine.drawHeight) / 30000;
-        const uniqueCoordinates = new Set();
-        const minInterval = 100;
+        randomVectors(bigStarsCount, this.getSpawnBox(), 100).forEach(vec => {
+            const star = this.bigStarsPool!.rent(true).setPos(vec);
 
-        let attempts = 0;
-        while(uniqueCoordinates.size < bigStarsCount && attempts < 50) {
-            attempts++;
-
-            const randomX = Math.floor(Math.floor(Math.random() * (this.engine.drawWidth + minInterval) / minInterval) * minInterval);
-            const randomY = Math.floor(Math.floor(Math.random() * (this.engine.drawHeight + minInterval) / minInterval) * minInterval);
-
-            const key = randomX + ',' + randomY;
-            if (!uniqueCoordinates.has(key)) {
-                attempts = 0;
-                this.bigStars.push(this.bigStarsPool.rent(true).setPos(randomX, randomY));
-                uniqueCoordinates.add(key);
-            }
-        }
-
-        this.bigStars.forEach(star => this.add(star));
+            this.bigStars.push(star);
+            this.add(star);
+        });
     }
 
     protected onUpdateState(): void {
@@ -106,30 +94,7 @@ export class Main extends Scene {
     }
 
     protected makeComet(): void {
-        const from = new Vector(
-            randomIntInRange(-10, this.engine.drawWidth + 10),
-            randomIntInRange(-10, this.engine.drawHeight + 10),
-        );
-
-        const to = new Vector(
-            randomIntInRange(-10, this.engine.drawWidth + 10),
-            randomIntInRange(-10, this.engine.drawHeight + 10),
-        );
-
-        let distance = from.distance(to);
-
-        while (
-            distance < 50 || distance > 200
-            || to.x < 0 && from.x < 0
-            || to.y < 0 && from.y < 0
-            || to.x > this.engine.drawWidth && from.x < this.engine.drawWidth
-            || to.y > this.engine.drawHeight && from.y < this.engine.drawHeight
-        ) {
-            to.x = randomIntInRange(-10, this.engine.drawWidth + 10);
-            to.y = randomIntInRange(-10, this.engine.drawHeight + 10);
-
-            distance = from.distance(to);
-        }
+        const [from, to] = randomVectors(2, this.getSpawnBox(), 50, 200);
 
         this.cometsPool ??= new RentalPool(
             () => new Comet().setZ(2),
@@ -145,5 +110,16 @@ export class Main extends Scene {
             this.cometsTimer.reset(Math.round((Main.COMETS_INTERVAL / State.cometsInterval + 500 * Math.random())));
             this.cometsTimer.start();
         }
+    }
+
+    protected getSpawnBox(offset: number = 10): BoundingBox {
+        const box = this.engine.screen.getWorldBounds().clone();
+
+        box.top -= offset;
+        box.left -= offset;
+        box.bottom += offset;
+        box.right += offset;
+
+        return box;
     }
 }
