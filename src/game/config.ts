@@ -2,7 +2,7 @@ import {Color, DisplayMode} from 'excalibur';
 import {Main} from '@/game/scenes/main';
 
 export const Config = {
-    width: 512,
+    width: 256,
     height: 512,
     displayMode: DisplayMode.FitScreenAndFill,
     pixelArt: true,
@@ -12,5 +12,5 @@ export const Config = {
     fixedUpdateFps: 60,
     scenes: {main: Main},
     suppressConsoleBootMessage: false, // демонстрационный проект, поэтому намеренно всегда показываем
-    suppressPlayButton: true,
+    suppressPlayButton: true, // нет звука, т.е. аудио-контекст не нужен
 } as const;

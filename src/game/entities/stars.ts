@@ -1,8 +1,8 @@
 import {Engine} from 'excalibur';
-import {Material} from "@/game/materials/material";
+import {Material} from "@/game/extend/graphics/material";
 import {watch} from 'vue';
 import {State} from '@/state';
-import fragment from '@/game/materials/sources/stars.frag?raw';
+import fragment from '@/game/materials/stars.frag?raw';
 import {Colors} from '@/game/colors';
 import {Field} from '@/game/entities/field';
 
@@ -29,7 +29,7 @@ export class Stars extends Field {
     }
 
     public onPreUpdate(engine: Engine, _elapsed: number) {
-        this.graphics.material?.update(shader => shader.trySetUniformFloat('u_time', engine.clock.now()));
+        this.graphics.material?.update(shader => shader.trySetUniformFloat('u_time', engine.clock.now() / 1000));
     }
 
     protected onUpdateState(): void {

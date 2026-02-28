@@ -51,7 +51,7 @@ export class Main extends Scene {
             used => used.randomize(),
         );
 
-        const bigStarsCount = (this.engine.drawWidth * this.engine.drawHeight) / 60000;
+        const bigStarsCount = (this.engine.drawWidth * this.engine.drawHeight) / 30000;
         const uniqueCoordinates = new Set();
         const minInterval = 100;
 
