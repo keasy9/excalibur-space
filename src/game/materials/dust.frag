@@ -59,12 +59,12 @@ void main() {
     float threshold = mix(1.0, 0.0, amount);
 
     // маска облаков
-    float mask = fbm(v_uv * 0.1); // * 0.1 - подгонка для лучшего визуала
+    float mask = fbm(v_uv * 6.0); // * 6.0 - подгонка для лучшего визуала
     mask = smoothstep(threshold, threshold + 0.7, mask);
 
     // детали внутри облаков
     float detail = fbm(
-        v_uv * 4.0 + 4.0 //  * 4.0 + 4.0 - подгонка для лучшего визуала
+        v_uv * 5.0 + 3.0 //  * 4.0 + 4.0 - подгонка для лучшего визуала
     );
     detail = max(detail, 0.0);
     detail = detail * detail; // защита от отрицательных значений
