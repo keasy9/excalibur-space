@@ -46,14 +46,14 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent | Act
         this.getGraphic<Sprite>().tint = Color.lerpLRGB(Colors.starYellow, Colors.starBlue, Math.random());
         this.setRotation(Math.random() * Math.PI * 2);
 
-        this.actions.clearActions();
+        this.stopBlink();
 
-        if (Math.random() > .5) this.makeBlink();
+        if (Math.random() > .5) this.startBlink();
 
         return this;
     }
 
-    protected makeBlink(): void {
+    protected startBlink(): void {
         const fadeDuration = randomIntInRange(500, 1000);
 
         this.actions
@@ -66,8 +66,13 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent | Act
             });
     }
 
+    protected stopBlink(): void {
+        this.actions.clearActions();
+        this.setOpacity(1);
+    }
+
     protected onUpdateState(): void {
-        if (State.blinkStars) this.makeBlink();
-        else this.actions.clearActions();
+        if (State.blinkStars) this.startBlink();
+        else this.stopBlink();
     }
 }
