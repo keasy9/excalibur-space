@@ -1,12 +1,12 @@
 import {Entity} from '@/game/entities/entity';
-import {clamp, Engine, EntityOptions, GraphicsComponent, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
+import {ActionsComponent, Engine, EntityOptions, GraphicsComponent, randomIntInRange, Sprite, SpriteSheet, TransformComponent} from 'excalibur';
 import {Resources} from '@/game/resources';
 import {Color} from '@/game/extend/color';
 import {Colors} from '@/game/colors';
+import {watch} from 'vue';
 import {State} from '@/state';
-import {randomByVec} from '@/game/utils/math';
 
-export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
+export class BigStar extends Entity<GraphicsComponent | TransformComponent | ActionsComponent> {
 
     protected static texture: SpriteSheet|undefined;
 
@@ -16,6 +16,7 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
             components: [
                 new TransformComponent(),
                 new GraphicsComponent(),
+                new ActionsComponent(),
             ],
         });
     }
@@ -36,51 +37,8 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
 
     public onInitialize(_engine: Engine) {
         this.randomize();
-    }
 
-    public onPreUpdate(engine: Engine, _elapsed: number) {
-        // todo переделать на actions
-        if (!State.blinkStars) {
-            this.setOpacity(1.0);
-            return;
-        }
-
-        // вычисляем мерцание в рантайме, чтобы не следить за сменой позиции
-
-        const time: number = engine.clock.now() / 5000;
-        const pos: [number, number] = [this.getX(), this.getY()];
-
-        const tileSize = 20;
-        const tileX = Math.floor(pos[0] / tileSize);
-        const tileY = Math.floor(pos[1] / tileSize);
-
-        // базовая яркость
-        const baseOpacity = randomByVec(tileX + 2, tileY + 2) * 0.7 + 0.3;
-
-        // вероятность мерцания (порог 0.5 = 50% звёзд)
-        if (randomByVec(tileX + 4, tileY + 4) >= 0.5) {
-            // не мерцает
-            this.setOpacity(baseOpacity);
-            return;
-        }
-
-        const speed = randomByVec(tileX + 5, tileY + 5) * 3.0 + 2.0; // частота
-        const phase = randomByVec(tileX + 6, tileY + 6) * 2.0 * Math.PI; // фаза
-        const phaseSeed = randomByVec(tileX + 7, tileY + 7) * 20.0; // для медленной активности
-
-        // медленная активность (плавно меняется от 0 до 1)
-        const activity = 0.5 + 0.5 * Math.sin(time * 0.3 + phaseSeed);
-
-        // быстрое мерцание (коэффициент от 0.1 до 1.3)
-        const blinkFactor = 0.7 + 0.6 * Math.sin(time * speed + phase);
-
-        // смешивание обычного режима и режима мерцания под управлением activity
-        const mergedFactor = (1.0 - activity) + (activity * blinkFactor);
-
-        // итоговая яркость с учётом базовой и ограничений
-        const finalBrightness = clamp(baseOpacity * mergedFactor, 0.1, 1.0);
-
-        this.setOpacity(finalBrightness);
+        watch(() => State.blinkStars, this.onUpdateState.bind(this));
     }
 
     public randomize(): this {
@@ -88,6 +46,28 @@ export class BigStar extends Entity<GraphicsComponent | TransformComponent> {
         this.getGraphic<Sprite>().tint = Color.lerpLRGB(Colors.starYellow, Colors.starBlue, Math.random());
         this.setRotation(Math.random() * Math.PI * 2);
 
+        this.actions.clearActions();
+
+        if (Math.random() > .5) this.makeBlink();
+
         return this;
+    }
+
+    protected makeBlink(): void {
+        const fadeDuration = randomIntInRange(500, 1000);
+
+        this.actions
+            .delay(randomIntInRange(1, 10) * 2000)
+            .repeatForever((actions) => {
+                actions.fade(0, fadeDuration)
+                    .delay(100)
+                    .fade(1, fadeDuration)
+                    .delay(4500)
+            });
+    }
+
+    protected onUpdateState(): void {
+        if (State.blinkStars) this.makeBlink();
+        else this.actions.clearActions();
     }
 }
