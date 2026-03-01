@@ -27,10 +27,7 @@ export class Dust extends Field {
 
             this.material.update(shader => {
                 // облака
-                shader.trySetUniformFloat('u_size', 20.0);
-                shader.trySetUniformFloat('u_cloud_size', 20.0);
                 shader.trySetUniformFloat('u_amount', State.dustAmount);
-                shader.trySetUniformFloat('u_sharpness', 0.7);
 
                 // цвета
                 shader.trySetUniformFloatColor('u_color_high', Colors.starBlue);

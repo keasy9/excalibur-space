@@ -6,13 +6,10 @@ precision lowp float;
 
 in vec2 v_uv;
 
-uniform float u_size;               // детализация внутри облака
-uniform float u_cloud_size;          // размер облачных масс
-uniform float u_amount;              // кол-во туманности
-uniform float u_sharpness;           // резкость границ
+uniform float u_amount; // кол-во туманности
 
-uniform vec4 u_color_low;            // цвет границ пыли
-uniform vec4 u_color_high;           // цвет облаков пыли
+uniform vec4 u_color_low; // цвет границ пыли
+uniform vec4 u_color_high; // цвет облаков пыли
 
 out vec4 out_color;
 
@@ -58,20 +55,22 @@ float fbm(vec2 coord) {
 
 void main() {
     // нормализуем кол-во пыли
-    float amount = mix(0.22, 0.8, u_amount);
+    float amount = mix(0.35, 0.6, u_amount);
     float threshold = mix(1.0, 0.0, amount);
 
     // маска облаков
-    float mask = fbm(v_uv * u_cloud_size);
-    mask = smoothstep(threshold, threshold + u_sharpness, mask);
+    float mask = fbm(v_uv * 0.1); // * 0.1 - подгонка для лучшего визуала
+    mask = smoothstep(threshold, threshold + 0.7, mask);
 
     // детали внутри облаков
-    float detail = fbm(v_uv * u_size) - 0.4 * u_amount;
+    float detail = fbm(
+        v_uv * 4.0 + 4.0 //  * 4.0 + 4.0 - подгонка для лучшего визуала
+    );
     detail = max(detail, 0.0);
     detail = detail * detail; // защита от отрицательных значений
 
     // плотность облака, она же его альфа
-    float cloudDensity = mask * detail;
+    float cloudDensity = mix(0.0, 1.0 - u_amount * 0.2, mask * detail);
 
     out_color = vec4(mix(u_color_high.rgb, u_color_low.rgb, cloudDensity) * cloudDensity, cloudDensity);
 }
