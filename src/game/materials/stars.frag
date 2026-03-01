@@ -20,13 +20,6 @@ float hash(in vec2 x) {
 }
 
 /**
- * Фаза мерцания. Скрываем звезду на небольшое время, затем показываем подольше.
- */
-float blink_phase(float x) {
-    return pow(cos(3.14 * x / 2.0), 0.5);
-}
-
-/**
  * Цвет звезды для текущей позиции pos и кол-ва звёзд threshold.
  */
 vec4 star_color(in vec2 pos, float threshold) {
@@ -37,8 +30,8 @@ vec4 star_color(in vec2 pos, float threshold) {
         star = pow((star - threshold) / (1.0 - threshold), 6.0);
 
         if (u_blinking_enabled) {
-            float time = blink_phase((sin(u_time * hash(pos + 5.0)) + 1.0) / 2.0);
-            star = star * time;
+            float time = sin(u_time * hash(pos + 5.0)) + 1.0;
+            star = star * min(time, 1.0);
         }
 
         color = mix(u_star_from_color, u_star_to_color, hash(pos + 10.0));
