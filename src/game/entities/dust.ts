@@ -28,13 +28,13 @@ export class Dust extends Field {
             this.material.update(shader => {
                 // облака
                 shader.trySetUniformFloat('u_size', 20.0);
-                shader.trySetUniformFloat('u_cloud_size', 10.0);
+                shader.trySetUniformFloat('u_cloud_size', 20.0);
                 shader.trySetUniformFloat('u_amount', State.dustAmount);
-                shader.trySetUniformFloat('u_sharpness', 0.5);
+                shader.trySetUniformFloat('u_sharpness', 0.7);
 
-                // цвета звёзд
-                shader.trySetUniform('uniform3fv', 'u_color_high',[Colors.starBlue.r / 255, Colors.starBlue.g / 255, Colors.starBlue.b / 255]);
-                shader.trySetUniform('uniform3fv', 'u_color_low',[Colors.starYellow.r / 255, Colors.starYellow.g / 255, Colors.starYellow.b / 255]);
+                // цвета
+                shader.trySetUniformFloatColor('u_color_high', Colors.starBlue);
+                shader.trySetUniformFloatColor('u_color_low', Colors.starYellow);
             });
         }
 

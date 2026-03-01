@@ -13,9 +13,9 @@ uniform vec4 u_star_to_color;
 out vec4 out_color;
 
 /**
- * Шум на основе целочисленного хэша. Работает намного лучше и быстрее синуса.
+ * Рандом на основе целочисленного хэша. Работает намного лучше и быстрее синуса.
  */
-float noice(in vec2 x) {
+float hash(in vec2 x) {
     return fract(415.92653 * (cos(x.x * 37.0) + cos(x.y * 57.0)));
 }
 
@@ -30,18 +30,18 @@ float blink_phase(float x) {
  * Цвет звезды для текущей позиции pos и кол-ва звёзд threshold.
  */
 vec4 star_color(in vec2 pos, float threshold) {
-    float star = noice(pos);
+    float star = hash(pos);
     vec4 color = vec4(0.0);
 
     if (star >= threshold) {
         star = pow((star - threshold) / (1.0 - threshold), 6.0);
 
         if (u_blinking_enabled) {
-            float time = blink_phase((sin(u_time * noice(pos + 5.0)) + 1.0) / 2.0);
+            float time = blink_phase((sin(u_time * hash(pos + 5.0)) + 1.0) / 2.0);
             star = star * time;
         }
 
-        color = mix(u_star_from_color, u_star_to_color, noice(pos + 10.0));
+        color = mix(u_star_from_color, u_star_to_color, hash(pos + 10.0));
 
     } else {
         star = 0.0;

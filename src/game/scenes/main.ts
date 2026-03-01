@@ -18,11 +18,11 @@ export class Main extends Scene {
     protected cometsPool: RentalPool<Comet>|undefined;
 
     public onInitialize(engine: Engine) {
-        this.makeStars();
         this.makeBigStars();
-        this.onUpdateState();
+        this.add(new Dust().setZ(2));
+        this.add(new Stars().setZ(3));
 
-        this.add(new Dust().setZ(3));
+        this.onUpdateState();
 
         engine.screen.events.on('resize', () => this.onResize());
 
@@ -37,10 +37,6 @@ export class Main extends Scene {
         });
         this.add(fpsTimer);
         fpsTimer.start();
-    }
-
-    protected makeStars() {
-        this.add(new Stars());
     }
 
     protected makeBigStars() {
