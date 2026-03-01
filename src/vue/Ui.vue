@@ -15,7 +15,7 @@
             />
             <Range
                 v-model="modelValue.cometsInterval"
-                label="Частота комет"
+                label="Кол-во комет"
             />
             <Range
                 v-model="modelValue.dustAmount"
