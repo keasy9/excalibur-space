@@ -7,19 +7,19 @@
             </span>
             <Toggle
                 v-model="modelValue.blinkStars"
-                label="Мерцание звёзд"
+                label="Мерцание"
             />
             <Range
                 v-model="modelValue.starsAmount"
-                label="Кол-во звёзд"
+                label="Звёздность"
             />
             <Range
                 v-model="modelValue.cometsInterval"
-                label="Кол-во комет"
+                label="Кометность"
             />
             <Range
                 v-model="modelValue.dustAmount"
-                label="Кол-во пыли"
+                label="Пыльность"
             />
             <ResetButton
                 @click="resetState"
@@ -51,10 +51,12 @@
 
 <style lang="less">
     .ui {
+        user-select: none;
+
         &__group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
     }
 </style>
