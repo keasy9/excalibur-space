@@ -4,11 +4,14 @@ import vuePlugin from '@vitejs/plugin-vue';
 
 export default defineConfig({
     base: './',
+    publicDir: 'assets',
     plugins: [vuePlugin()],
     optimizeDeps: {
         exclude: ['excalibur'],
     },
     build: {
+        outDir: 'public',
+        emptyOutDir: true,
         assetsInlineLimit: 0,
         sourcemap: true,
         rolldownOptions: {
@@ -25,6 +28,6 @@ export default defineConfig({
     },
     server: {
         host: true,
-        port: 5173,
+        allowedHosts: true,
     },
 });

@@ -1,6 +1,7 @@
 node_modules
 .DS_Store
-dist
-dist-ssr
+public
+public-ssr
 *.local
 .idea
+pnpm-workspace.yaml
